@@ -2,7 +2,7 @@
 """
 HackRF SDR Toolkit Framework
 College RF Project - Educational Use Only
-Made by JustADood
+
 
 """
 
