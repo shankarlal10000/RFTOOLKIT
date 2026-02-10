@@ -1,122 +1,160 @@
+
 #!/usr/bin/env python3
 """
-HackRF SDR Toolkit Framework
-College RF Project - Educational Use Only
+RFToolkit - HackRF SDR Research Framework
 
+Open-source educational and research toolkit designed to simplify
+software-defined radio experimentation using HackRF devices.
 
+This framework provides modular RF experimentation workflows
+focused on signal analysis, protocol research, and controlled
+RF laboratory experimentation.
+Author : Shankar
+License: GPLv3
 """
 
 import os
 import sys
 import time
-import subprocess
-import threading
 from pathlib import Path
-import argparse
+
 
 class RFToolkit:
     def __init__(self):
         self.clear_screen()
-        self.author = "JustADood"
+        self.author = "Srajan Sonkesriya"
+        self.project_name = "RFToolkit"
         self.version = "0.6.1"
+
+        # Base configuration directory
         self.base_dir = Path.home() / ".rf_toolkit"
         self.base_dir.mkdir(exist_ok=True)
-        
+
     def clear_screen(self):
-        os.system('clear' if os.name == 'posix' else 'cls')
-    
+        os.system("clear" if os.name == "posix" else "cls")
+
     def display_logo(self):
-        logo = """
+        logo = f"""
 ==================================================
-         RF SDR TOOLKIT FRAMEWORK
-           Educational Use Only
-             College Project
+                {self.project_name}
+        SDR Research & Experimentation Toolkit
+                    Version {self.version}
 ==================================================
         """
         print(logo)
-# Main menu, now with proper look(i think)
-# Edit - still sucks, needs coloring or some bullshit
+
     def display_menu(self):
-        print(f"Author: {self.author}")
-        print(f"Version: {self.version}")
-        print("\n" + "="*50)
-        print("           MAIN MENU")
-        print("="*50)
-        print("1. RF Replay Attack")
-        print("2. GPS Spoofing")
-        print("3. RF Jamming")
-        print("4. Protocols (ADS-B(BETA), etc.)")  # NEW OPTION, WOOOOOOOOOOOOOOOOOOO, yeah baby
-        print("5. RF Samples/Scripts (Portapack/FZ) (Not ready yet)")
-        print("6. Exit")  # Updated from 5 to 6
-        print("="*50)
-    
+        print(f"Maintainer: {self.author}")
+        print("\n" + "=" * 50)
+        print("                MAIN MENU")
+        print("=" * 50)
+
+        print("1. RF Signal Capture & Replay")
+        print("2. GNSS Signal Simulation")
+        print("3. RF Interference Simulation")
+        print("4. Protocol Research Tools")
+        print("5. Experimental Scripts & Samples")
+        print("6. Exit")
+
+        print("=" * 50)
+
     def run(self):
         while True:
             self.clear_screen()
             self.display_logo()
             self.display_menu()
-            
+
             try:
-                choice = input("\nEnter your choice (1-6): ").strip()  # Updated to 6
-                
-                if choice == '1':
+                choice = input("\nEnter your choice (1-6): ").strip()
+
+                if choice == "1":
                     self.rf_replay_menu()
-                elif choice == '2':
-                    self.gps_spoof_menu()
-                elif choice == '3':
-                    self.rf_jamming_menu()
-                elif choice == '4':
+
+                elif choice == "2":
+                    self.gnss_simulation_menu()
+
+                elif choice == "3":
+                    self.rf_interference_menu()
+
+                elif choice == "4":
                     self.protocols_menu()
-                elif choice == '5':
+
+                elif choice == "5":
                     self.special_scripts_menu()
-                elif choice == '6':
-                    print("\nThank you for using RFToolkit!")
+
+                elif choice == "6":
+                    print("\nThank you for using RFToolkit.")
                     sys.exit(0)
+
                 else:
-                    print("\nInvalid choice! Please try again.")
+                    print("\nInvalid selection. Please try again.")
                     input("Press Enter to continue...")
-                    
+
             except KeyboardInterrupt:
                 print("\n\nOperation cancelled by user.")
                 sys.exit(0)
+
             except Exception as e:
                 print(f"\nError: {e}")
                 input("Press Enter to continue...")
-# Functions of modules
+
+    # ================= MODULE ROUTERS ================= #
+
     def rf_replay_menu(self):
+        """
+        RF signal capture and replay workflows.
+        Intended for controlled RF experimentation and protocol testing.
+        """
         from modules.rf_replay import RFReplay
-        replay = RFReplay()
-        replay.run()
 
-    def gps_spoof_menu(self):
+        RFReplay().run()
+
+    def gnss_simulation_menu(self):
+        """
+        GNSS signal simulation module for navigation system research
+        and controlled vulnerability testing.
+        """
         from modules.gps_spoof import GPSSpoof
-        gps = GPSSpoof()
-        gps.run()
 
-    def rf_jamming_menu(self):
+        GPSSpoof().run()
+
+    def rf_interference_menu(self):
+        """
+        RF interference simulation module used for studying
+        communication robustness and spectrum coexistence challenges.
+        """
         from modules.rf_jammer import RFJammer
-        jammer = RFJammer()
-        jammer.run()
+
+        RFJammer().run()
 
     def protocols_menu(self):
+        """
+        Protocol research hub containing signal decoding
+        and wireless protocol experimentation modules.
+        """
         from modules.protocols_hub import Protocols
-        protocols = Protocols()
-        protocols.run()
+
+        Protocols().run()
 
     def special_scripts_menu(self):
+        """
+        Experimental workflows and community-contributed scripts.
+        """
         from modules.special_scripts import SpecialScripts
-        scripts = SpecialScripts()
-        scripts.run()
+
+        SpecialScripts().run()
+
 
 def main():
-# Check if root is available
+
+    # Root privilege warning
     if os.geteuid() != 0:
-        print("Warning: Some features may require root privileges")
-# sleep needed, because framework may be ran on a potato(i hate poor people)
+        print("Note: Some SDR operations may require elevated privileges.")
         time.sleep(1)
-    
+
     toolkit = RFToolkit()
     toolkit.run()
+
 
 if __name__ == "__main__":
     main()
